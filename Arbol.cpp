@@ -2,7 +2,7 @@
 
 #include "Arbol.h"
 #include <iostream>
-#include <stack>
+#include <queue>
 
 Arbol::Arbol() : _raiz(NULL)
 {
@@ -30,23 +30,23 @@ void Arbol::Procesar(Nodo *nodo)
 
 void Arbol::Recorrer()
 {
-	Recorrer(_raiz);
-}
+    std::queue<Nodo*> nodosQueue;
+    nodosQueue.push(_raiz);
 
-void Arbol::Recorrer(Nodo *nodo)
-{
-	Procesar(nodo);
+    while (!nodosQueue.empty()) {
+        Nodo* current = nodosQueue.front();
+        nodosQueue.pop();
 
-	std::cout << nodo->GetNombre() << std::endl;
-	
-	if (nodo->GetUltimoHijo() != NULL) {
-		Nodo* i = nodo->GetPrimerHijo();
+        Procesar(current);
 
-		while (i != NULL) {
-			Recorrer(i);
-			i = i->GetSiguienteHijo();
-		}
-	}
+        std::cout << current->GetNombre() << std::endl;
+
+        Nodo* child = current->GetUltimoHijo();
+        while (child != NULL) {
+            nodosQueue.push(child);
+            child = child->GetSiguienteHijo();
+        }
+    }
 }
 
 Nodo *Arbol::GetNodo(int indice)
@@ -75,15 +75,10 @@ Arbol::~Arbol()
 
 void Nodo::AgregarHijo(Nodo *hijo)
 {
-	if (hijo != NULL) {
-		if (_primerHijo == NULL) {
-			_primerHijo = hijo;
-			_ultimoHijo = hijo;
-		}
-		else {
-			_ultimoHijo->SetSiguienteHijo(hijo);
-			_ultimoHijo = hijo;
-		}
+	if (hijo != NULL)
+	{
+		_primerHijo = (_primerHijo == NULL) ? hijo : _primerHijo;
+		_ultimoHijo = hijo;
 	}
 }
 
