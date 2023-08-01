@@ -1,5 +1,8 @@
+// ARBOL GENEALOGICO - TAREA 6 ESTRUCTURA DE DATOS ITLA
+
 #include "Arbol.h"
 #include <iostream>
+#include <stack>
 
 Arbol::Arbol() : _raiz(NULL)
 {
@@ -30,13 +33,20 @@ void Arbol::Recorrer()
 	Recorrer(_raiz);
 }
 
-// Implementar este método
 void Arbol::Recorrer(Nodo *nodo)
 {
-	// La primera línea de código de este método debe llamar al método procesar
 	Procesar(nodo);
 
-	// Escribir aqui el código de su implementación de recorrer el árbol
+	std::cout << nodo->GetNombre() << std::endl;
+	
+	if (nodo->GetUltimoHijo() != NULL) {
+		Nodo* i = nodo->GetPrimerHijo();
+
+		while (i != NULL) {
+			Recorrer(i);
+			i = i->GetSiguienteHijo();
+		}
+	}
 }
 
 Nodo *Arbol::GetNodo(int indice)
@@ -63,11 +73,18 @@ Arbol::~Arbol()
 {
 }
 
-// Este método corresponde a la clase NODO
-// Implementar este método
 void Nodo::AgregarHijo(Nodo *hijo)
 {
-	// Este método le agrega un hijo a este nodo del arbol
+	if (hijo != NULL) {
+		if (_primerHijo == NULL) {
+			_primerHijo = hijo;
+			_ultimoHijo = hijo;
+		}
+		else {
+			_ultimoHijo->SetSiguienteHijo(hijo);
+			_ultimoHijo = hijo;
+		}
+	}
 }
 
-// modification by Geronimo on Monday, July 31, 2023
+// MODIFIED BY GERO ON TUE, AUG 01, 2023
